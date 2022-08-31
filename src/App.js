@@ -8,9 +8,11 @@ function App() {
   const [contacts, setContacts] = useState(firstFiveContacts);
 
   const addRandomContact = () => {
-    const randomContact =
-      restOfContacts[Math.floor(Math.random() * restOfContacts.length)];
-    setContacts((contacts) => [...contacts, randomContact]);
+    const randomContact = restOfContacts[Math.floor(Math.random() * restOfContacts.length)];
+    const index = contacts.findIndex((contact) => contact.id === randomContact.id)
+    if(index === -1) {
+      setContacts((contacts) => [...contacts, randomContact]);
+    }
   };
 
   const sortByPopularity = () => {
@@ -27,10 +29,28 @@ function App() {
 
   const deleteContact = (id) => {
     const contactsCopy = [...contacts];
-    const contactToDelete = contactsCopy.filter((el) => el.id === id)[0];
-    contactsCopy.splice(contactsCopy.indexOf(contactToDelete), 1);
-    setContacts(contactsCopy);
+    const contactToDelete = contactsCopy.filter(contact => contact.id !== id)
+    setContacts(contactToDelete);
   };
+
+  // const deleteContact = (id) => {
+  //   const contactsCopy = [...contacts];
+  //   const contactToDelete = contactsCopy.filter((contact) => contact.id === id)[0];
+  //   contactsCopy.splice(contactsCopy.indexOf(contactToDelete), 1);
+  //   setContacts(contactsCopy);
+  // };
+
+  if (contacts.length === 0) {
+    return (
+      <div className='App'>
+        <h1>IronContacts</h1>
+        <p>Sorry, no contacts to display...</p>
+        <div className='buttons'>
+          <button onClick={addRandomContact}>Add Random Contact</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='App'>
